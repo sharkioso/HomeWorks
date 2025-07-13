@@ -1,4 +1,4 @@
-package HomeWork.WeatherConsumer;
+package com.example.WeatherConsumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

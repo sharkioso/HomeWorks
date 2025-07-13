@@ -1,4 +1,4 @@
-package com.example.kafka;
+package com.example.WeatherProducer.kafka;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 @Configuration
 public class KafkaConfig {
@@ -24,10 +24,7 @@ public class KafkaConfig {
 
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        
-        config.put(ProducerConfig.ACKS_CONFIG,"all");
-        config.put(ProducerConfig.RETRIES_CONFIG,3);
-        
+
         return new DefaultKafkaProducerFactory<>(config);
         
     }
