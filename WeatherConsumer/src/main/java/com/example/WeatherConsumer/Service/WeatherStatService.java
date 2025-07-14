@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -22,31 +22,31 @@ public class WeatherStatService {
 
     public String getWarmCity()
     {
-        String town = weatherData.stream()
-                            .max(Comparator.comparingDouble(w->w.getTemperature()))
-                            .map(w->w.getCity())
+        Map <String,Double> cityAvg = weatherData.stream()
+                .collect(Collectors.groupingBy(
+                    w->w.getCity(),
+                    Collectors.averagingDouble(w->w.getTemperature())
+                ));
+        
+        String result = cityAvg.entrySet().stream()
+                            .max(Map.Entry.comparingByValue())
+                            .map(e->e.getKey()+" " + Math.round(e.getValue()*10)/10.0)
                             .orElse("No data");
-        double temp = weatherData.stream()
-                        .filter(w->town.equals(w.getCity()))
-                        .mapToDouble(w->w.getTemperature())
-                        .average()
-                        .orElse(0.0);
-        String result = town +" "+ Double.toString(Math.round(temp*10)/10.0);
         return result;
     }
 
     public String getColdestCity()
     {
-        String town = weatherData.stream()
-                            .min(Comparator.comparingDouble(w->w.getTemperature()))
-                            .map(w->w.getCity())
+        Map <String,Double> cityAvg = weatherData.stream()
+                .collect(Collectors.groupingBy(
+                    w->w.getCity(),
+                    Collectors.averagingDouble(w->w.getTemperature())
+                ));
+        
+        String result = cityAvg.entrySet().stream()
+                            .min(Map.Entry.comparingByValue())
+                            .map(e->e.getKey()+" " + Math.round(e.getValue()*10)/10.0)
                             .orElse("No data");
-        double temp = weatherData.stream()
-                        .filter(w->town.equals(w.getCity()))
-                        .mapToDouble(w->w.getTemperature())
-                        .average()
-                        .orElse(0.0);
-        String result = town + " " + Double.toString(Math.round(temp*10)/10.0);
         return result;
     }
 
